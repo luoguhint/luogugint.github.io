@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hint 自动机 v2｜渐进式洛谷提示生成器</title>
+  <meta name="description" content="输入洛谷题号，按关键词、概念、思路、关键步骤四档逐步获得提示，避免直接剧透答案。" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">H2</div>
+        <div class="brand-text">
+          <h1>Hint 自动机 <span style="color:var(--muted);font-weight:600">v2</span></h1>
+          <p>渐进提示 · 反剧透 · 题解来源筛选 · 本地可部署</p>
+        </div>
+      </div>
+      <div class="status-chip" id="status"><span class="dot"></span>正在连接服务…</div>
+    </header>
+
+    <section class="hero">
+      <h2 id="heroTitle">先给你方向，<em>不直接把答案端上来</em></h2>
+      <p>输入洛谷题号，自动抓取题面与公开题解，再按你选择的提示强度生成“关键词—概念—思路—关键步骤”。每一档都有防剧透审查；看到下一档前，会再确认一次。</p>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <form id="hintForm">
+          <label for="problemId">洛谷题号</label>
+          <div class="input-row">
+            <input id="problemId" class="input" placeholder="例如 P1001" autocomplete="off" spellcheck="false" required />
+            <button class="btn" id="submitBtn" type="submit">生成 Hint</button>
+          </div>
+
+          <div style="height:16px"></div>
+          <label>提示档位</label>
+          <div class="levels" id="levelGrid"></div>
+          <div class="modes" id="modeRow"></div>
+
+          <div style="height:16px"></div>
+          <label for="studentNote">当前思路 / 卡点（可选，越具体越精准）</label>
+          <textarea id="studentNote" class="input" placeholder="例如：想到了前缀和，但不知道如何处理修改操作。"></textarea>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="stage">为什么升级到 v2</div>
+        <h3 style="margin:2px 0 12px;font-size:18px">从“直接总结题解”到“扶一把”</h3>
+        <ul style="padding-left:20px;line-height:1.85;color:#cdd8ec;font-size:14px;margin:0">
+          <li><b>四档渐进提示</b>：先看关键词，卡住再逐步深入。</li>
+          <li><b>反剧透护栏</b>：禁止完整代码、题解全文和答案泄露。</li>
+          <li><b>先确认再剧透</b>：查看更高档位前需要二次确认。</li>
+          <li><b>题解质量排序</b>：优先参考点赞、完整性和互动数据。</li>
+          <li><b>缓存与限流</b>：同一请求命中缓存，降低抓取与模型压力。</li>
+          <li><b>模型可换</b>：OpenAI 兼容接口，Ollama / 云端均可。</li>
+        </ul>
+        <p class="note">题面、题解及版权均归属于原作者与洛谷；本工具仅作学习辅助，侵权请联系删除。</p>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:18px">
+      <div id="output">
+        <div class="stage">尚未生成</div>
+        <h3>提示会出现在这里</h3>
+        <p class="note">建议先独立读题、手算样例；实在没有方向时，从“关键词提示”开始，不要一上来直接看“关键步骤”。</p>
+      </div>
+    </section>
+
+    <p class="foot" id="footer"></p>
+  </main>
+
+  <div class="overlay" id="confirmModal">
+    <div class="modal">
+      <div class="stage">防剧透确认</div>
+      <h3>确定要查看「<span id="confirmLevel"></span>」吗？</h3>
+      <p>这会比当前档位更具体。先花 30 秒尝试自己完成这一步，说不定就通了呢？</p>
+      <div class="modal-actions">
+        <button class="btn ghost" id="confirmNo" type="button">再想想</button>
+        <button class="btn" id="confirmYes" type="button">我确定要看</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: hint-automata
+    runtime: docker
+    dockerfilePath: ./deploy/Dockerfile
+    branch: main
+    buildCommand: ""
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: LLM_BASE_URL
+        sync: false
+      - key: LLM_API_KEY
+        sync: false
+      - key: LLM_MODEL
+        value: qwen2.5:14b
+      - key: LUOGU_ENABLED
+        value: "true"
+      - key: CACHE_HOURS
+        value: "24"
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "30"
+      - key: DEMO_API_KEY
+        sync: false
+      - key: APP_URL
+        fromService:
+          type: web
+          name: hint-automata
+          property: host
